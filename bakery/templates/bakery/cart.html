@@ -1,0 +1,212 @@
+{% extends "bakery/base.html" %}
+
+{% block title %}
+Shopping Cart | Kavya's Bakery
+{% endblock %}
+
+{% block content %}
+
+<section class="cart-section">
+
+    <h1>🛒 Your Shopping Cart</h1>
+
+
+    {% if cart_items %}
+
+        <div class="cart-container">
+
+            <!-- =========================================
+                 CART ITEMS
+            ========================================== -->
+
+            <div class="cart-items">
+
+                {% for item in cart_items %}
+
+                    <div class="cart-item">
+
+                        <!-- PRODUCT IMAGE -->
+
+                        <div class="cart-image">
+
+                            {% if item.product.image %}
+
+                                <img
+                                    src="{{ item.product.image.url }}"
+                                    alt="{{ item.product.name }}"
+                                >
+
+                            {% else %}
+
+                                <div class="no-image">
+                                    No Image Available
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- PRODUCT DETAILS -->
+
+                        <div class="cart-details">
+
+                            <h2>
+                                {{ item.product.name }}
+                            </h2>
+
+                            <p>
+                                ₹{{ item.product.price }}
+                            </p>
+
+
+                            <!-- QUANTITY -->
+
+                            <div class="quantity-controls">
+
+                                <a
+                                    href="{% url 'decrease_quantity' item.id %}"
+                                    class="quantity-btn"
+                                >
+                                    −
+                                </a>
+
+                                <span class="quantity">
+                                    {{ item.quantity }}
+                                </span>
+
+                                <a
+                                    href="{% url 'increase_quantity' item.id %}"
+                                    class="quantity-btn"
+                                >
+                                    +
+                                </a>
+
+                            </div>
+
+
+                            <!-- ITEM TOTAL -->
+
+                            <p class="item-total">
+
+                                Item Total:
+
+                                <strong>
+                                    ₹{{ item.total_price }}
+                                </strong>
+
+                            </p>
+
+
+                            <!-- REMOVE -->
+
+                            <a
+                                href="{% url 'remove_from_cart' item.id %}"
+                                class="remove-btn"
+                            >
+                                🗑️ Remove
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- =========================================
+                 ORDER SUMMARY
+            ========================================== -->
+
+            <div class="cart-summary">
+
+                <h2>
+                    Order Summary
+                </h2>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Total Items
+                    </span>
+
+                    <strong>
+                        {{ cart_items|length }}
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row total-row">
+
+                    <span>
+                        Total Price
+                    </span>
+
+                    <strong>
+                        ₹{{ total }}
+                    </strong>
+
+                </div>
+
+
+                <!-- =====================================
+                     CHECKOUT BUTTON
+                ====================================== -->
+
+                <a
+                    href="{% url 'checkout' %}"
+                    class="checkout-btn"
+                >
+                    Proceed to Checkout
+                </a>
+
+
+                <!-- CONTINUE SHOPPING -->
+
+                <a
+                    href="{% url 'home' %}"
+                    class="continue-shopping"
+                >
+                    ← Continue Shopping
+                </a>
+
+            </div>
+
+        </div>
+
+
+    {% else %}
+
+        <!-- =========================================
+             EMPTY CART
+        ========================================== -->
+
+        <div class="empty-cart">
+
+            <h2>
+                Your cart is currently empty.
+            </h2>
+
+            <p>
+                Add some delicious bakery products
+                to your cart.
+            </p>
+
+            <a
+                href="{% url 'home' %}"
+                class="btn"
+            >
+                Continue Shopping
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

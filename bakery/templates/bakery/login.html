@@ -1,0 +1,98 @@
+{% extends "bakery/base.html" %}
+
+{% block title %}
+Login | Kavya's Bakery
+{% endblock %}
+
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-container">
+
+        <h2>
+            Welcome Back
+        </h2>
+
+        <p>
+            Login to your Kavya's Bakery account.
+        </p>
+
+
+        {% if error %}
+
+            <div class="form-errors">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            class="auth-form"
+        >
+
+            {% csrf_token %}
+
+
+            <p>
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter username"
+                    required
+                >
+
+            </p>
+
+
+            <p>
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter password"
+                    required
+                >
+
+            </p>
+
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <p class="auth-link">
+
+            Don't have an account?
+
+            <a href="{% url 'register' %}">
+                Create Account
+            </a>
+
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}

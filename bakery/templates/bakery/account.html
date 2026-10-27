@@ -1,0 +1,160 @@
+{% extends "bakery/base.html" %}
+
+{% block title %}
+My Account | Kavya's Bakery
+{% endblock %}
+
+
+{% block content %}
+
+<section class="account-section">
+
+    <div class="account-container">
+
+        <!-- =========================================
+             ACCOUNT HEADER
+        ========================================== -->
+
+        <h1>
+            👤 My Account
+        </h1>
+
+        <p class="account-welcome">
+            Welcome, {{ user.username }}! 👋
+        </p>
+
+
+        <!-- =========================================
+             PERSONAL INFORMATION
+        ========================================== -->
+
+        <div class="account-card">
+
+            <h2>
+                Personal Information
+            </h2>
+
+            <p>
+                <strong>Username:</strong>
+                {{ user.username }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+
+                {% if user.email %}
+                    {{ user.email }}
+                {% else %}
+                    Not provided
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+        <!-- =========================================
+             MY ORDERS SUMMARY
+        ========================================== -->
+
+        <div class="account-card">
+
+            <h2>
+                📦 My Orders
+            </h2>
+
+            {% if orders %}
+
+                <p>
+                    You have placed
+                    <strong>{{ orders|length }}</strong>
+                    order{{ orders|length|pluralize }}.
+                </p>
+
+                <a
+                    href="{% url 'my_orders' %}"
+                    class="account-btn"
+                >
+                    📦 View My Orders
+                </a>
+
+            {% else %}
+
+                <p>
+                    You haven't placed any orders yet.
+                </p>
+
+                <a
+                    href="{% url 'home' %}"
+                    class="account-btn"
+                >
+                    🛍️ Start Shopping
+                </a>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =========================================
+             ACCOUNT ACTIONS
+        ========================================== -->
+
+        <div class="account-actions">
+
+            <!-- HOME -->
+
+            <a
+                href="{% url 'home' %}"
+                class="account-btn"
+            >
+                🏠 Continue Shopping
+            </a>
+
+
+            <!-- CART -->
+
+            <a
+                href="{% url 'cart' %}"
+                class="account-btn"
+            >
+                🛒 My Cart
+            </a>
+
+
+            <!-- ORDERS -->
+
+            <a
+                href="{% url 'my_orders' %}"
+                class="account-btn"
+            >
+                📦 My Orders
+            </a>
+
+
+            <!-- ADDRESSES -->
+
+            <a
+                href="#"
+                class="account-btn"
+            >
+                📍 My Addresses
+            </a>
+
+
+            <!-- LOGOUT -->
+
+            <a
+                href="{% url 'logout' %}"
+                class="account-btn"
+            >
+                🚪 Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

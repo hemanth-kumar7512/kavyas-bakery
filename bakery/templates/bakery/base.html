@@ -1,0 +1,162 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+        Kavya's Bakery
+        {% endblock %}
+    </title>
+
+    <link rel="stylesheet"
+          href="{% static 'bakery/css/style.css' %}">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+
+        <!-- LOGO -->
+
+        <a href="{% url 'home' %}" class="logo">
+            🍰 Kavya's Bakery
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="nav-links">
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'home' %}#menu">
+                Menu
+            </a>
+
+            <a href="{% url 'home' %}#cakes-menu">
+                Cakes
+            </a>
+
+            <a href="{% url 'home' %}#tarts-menu">
+                Tarts
+            </a>
+
+            <a href="{% url 'home' %}#croissants-menu">
+                Croissants
+            </a>
+
+            <a href="{% url 'home' %}#savouries-menu">
+                Savouries
+            </a>
+
+        </nav>
+
+
+        <!-- =================================================
+             RIGHT SIDE
+        ================================================== -->
+
+        <div class="nav-actions">
+
+            {% if user.is_authenticated %}
+
+                <!-- USER ACCOUNT -->
+
+    
+                <a href="{% url 'account' %}">
+                    👤 My Account
+                </a>
+
+                <!-- LOGOUT -->
+
+                <a href="{% url 'logout' %}">
+                    🚪 Logout
+                </a>
+
+            {% else %}
+
+                <!-- SIGN UP -->
+
+                <a href="{% url 'register' %}">
+                    Sign Up
+                </a>
+
+
+                <!-- LOGIN -->
+
+                <a href="{% url 'login' %}">
+                    Login
+                </a>
+
+            {% endif %}
+
+
+            <!-- CART -->
+
+            <a href="{% url 'cart' %}"
+               class="cart-link">
+                🛒 Cart
+            </a>
+            <a href="{% url 'my_orders' %}">
+                📦 My Orders
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     PAGE CONTENT
+===================================================== -->
+
+{% block content %}
+{% endblock %}
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <h2>
+        Kavya's Bakery
+    </h2>
+
+    <p>
+        Freshly baked happiness every day.
+    </p>
+
+    <p class="copyright">
+        © 2026 Kavya's Bakery. All Rights Reserved.
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

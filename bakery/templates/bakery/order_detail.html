@@ -1,0 +1,332 @@
+{% extends "bakery/base.html" %}
+
+{% block title %}
+Order Details | Kavya's Bakery
+{% endblock %}
+
+{% block content %}
+
+<section class="cart-section">
+
+    <h1>📦 Order Details</h1>
+
+
+    <!-- =====================================================
+         ORDER INFORMATION
+    ====================================================== -->
+
+    <div class="order-card">
+
+        <h2>
+            Order #{{ order.id }}
+        </h2>
+
+
+        <!-- ORDER DATE -->
+
+        <p>
+            <strong>Order Date:</strong>
+
+            {{ order.created_at|date:"d M Y, h:i A" }}
+        </p>
+
+
+        <!-- ORDER STATUS -->
+
+        <p>
+            <strong>Order Status:</strong>
+
+            {% if order.status == "PENDING" %}
+
+                🟡 Pending
+
+            {% elif order.status == "CONFIRMED" %}
+
+                🔵 Confirmed
+
+            {% elif order.status == "PREPARING" %}
+
+                🟠 Preparing
+
+            {% elif order.status == "OUT_FOR_DELIVERY" %}
+
+                🚚 Out for Delivery
+
+            {% elif order.status == "DELIVERED" %}
+
+                🟢 Delivered
+
+            {% elif order.status == "CANCELLED" %}
+
+                🔴 Cancelled
+
+            {% else %}
+
+                {{ order.get_status_display }}
+
+            {% endif %}
+
+        </p>
+
+
+        <!-- PAYMENT METHOD -->
+
+        <p>
+            <strong>Payment Method:</strong>
+
+            {{ order.get_payment_method_display }}
+
+        </p>
+
+
+        <!-- PAYMENT STATUS -->
+
+        <p>
+            <strong>Payment Status:</strong>
+
+            {% if order.payment_status == "PENDING" %}
+
+                🟡 Pending
+
+            {% elif order.payment_status == "PAID" %}
+
+                🟢 Paid
+
+            {% elif order.payment_status == "FAILED" %}
+
+                🔴 Failed
+
+            {% else %}
+
+                {{ order.get_payment_status_display }}
+
+            {% endif %}
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         DELIVERY DETAILS
+    ====================================================== -->
+
+    <div class="order-card">
+
+        <h2>
+            🚚 Delivery Details
+        </h2>
+
+
+        <p>
+            <strong>Full Name:</strong>
+
+            {{ order.full_name }}
+        </p>
+
+
+        <p>
+            <strong>Phone:</strong>
+
+            {{ order.phone }}
+        </p>
+
+
+        <p>
+            <strong>Address:</strong>
+
+            {{ order.address }}
+        </p>
+
+
+        <p>
+            <strong>City:</strong>
+
+            {{ order.city }}
+        </p>
+
+
+        <p>
+            <strong>Pincode:</strong>
+
+            {{ order.pincode }}
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         ORDER PRODUCTS
+    ====================================================== -->
+
+    <div class="order-card">
+
+        <h2>
+            🛍️ Ordered Products
+        </h2>
+
+
+        {% for item in order.items.all %}
+
+            <div class="summary-item">
+
+                <div>
+
+                    <strong>
+                        {{ item.product.name }}
+                    </strong>
+
+                    <p>
+                        Quantity:
+                        {{ item.quantity }}
+                    </p>
+
+                    <p>
+                        Price:
+                        ₹{{ item.price }}
+                    </p>
+
+                </div>
+
+
+                <strong>
+                    ₹{{ item.total_price }}
+                </strong>
+
+            </div>
+
+
+            <hr>
+
+
+        {% empty %}
+
+            <p>
+                No products found for this order.
+            </p>
+
+        {% endfor %}
+
+
+        <!-- TOTAL -->
+
+        <div class="summary-total">
+
+            <span>
+                Total Amount
+            </span>
+
+            <strong>
+                ₹{{ order.total_amount }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ORDER STATUS MESSAGE
+    ====================================================== -->
+
+    <div class="order-card">
+
+        {% if order.status == "PENDING" %}
+
+            <h3>
+                🟡 Your order is waiting for confirmation.
+            </h3>
+
+            <p>
+                We have received your order and will confirm
+                it shortly.
+            </p>
+
+
+        {% elif order.status == "CONFIRMED" %}
+
+            <h3>
+                🔵 Your order has been confirmed!
+            </h3>
+
+            <p>
+                Your order has been accepted by Kavya's Bakery.
+            </p>
+
+
+        {% elif order.status == "PREPARING" %}
+
+            <h3>
+                🟠 Your order is being prepared.
+            </h3>
+
+            <p>
+                Our bakery team is preparing your delicious
+                products.
+            </p>
+
+
+        {% elif order.status == "OUT_FOR_DELIVERY" %}
+
+            <h3>
+                🚚 Your order is out for delivery!
+            </h3>
+
+            <p>
+                Your order is on the way.
+            </p>
+
+
+        {% elif order.status == "DELIVERED" %}
+
+            <h3>
+                🟢 Order Delivered!
+            </h3>
+
+            <p>
+                Your order has been successfully delivered.
+                Thank you for ordering from Kavya's Bakery!
+            </p>
+
+
+        {% elif order.status == "CANCELLED" %}
+
+            <h3>
+                🔴 Order Cancelled
+            </h3>
+
+            <p>
+                This order has been cancelled.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         BUTTONS
+    ====================================================== -->
+
+    <div class="filter-buttons">
+
+        <a
+            href="{% url 'my_orders' %}"
+            class="btn"
+        >
+            ← Back to My Orders
+        </a>
+
+
+        <a
+            href="{% url 'home' %}"
+            class="btn"
+        >
+            🛍️ Continue Shopping
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}
