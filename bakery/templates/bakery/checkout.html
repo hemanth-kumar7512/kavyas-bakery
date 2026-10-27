@@ -1,0 +1,301 @@
+{% extends "bakery/base.html" %}
+
+{% block title %}
+Checkout | Kavya's Bakery
+{% endblock %}
+
+{% block content %}
+
+<section class="checkout-section">
+
+    <h1>🛍️ Checkout</h1>
+
+    <p class="checkout-subtitle">
+        Enter your delivery details to place your order.
+    </p>
+
+
+    {% if error %}
+
+        <div class="checkout-error">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    <div class="checkout-container">
+
+
+        <!-- =========================================
+             CUSTOMER DETAILS
+        ========================================== -->
+
+        <div class="checkout-form-box">
+
+            <h2>Delivery Details</h2>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- FULL NAME -->
+
+                <div class="form-group">
+
+                    <label for="full_name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="full_name"
+                        name="full_name"
+                        value="{{ full_name|default:'' }}"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value="{{ phone|default:'' }}"
+                        placeholder="Enter your phone number"
+                        maxlength="15"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="form-group">
+
+                    <label for="address">
+                        Delivery Address
+                    </label>
+
+                    <textarea
+                        id="address"
+                        name="address"
+                        rows="4"
+                        placeholder="House number, street, area"
+                        required
+                    >{{ address|default:'' }}</textarea>
+
+                </div>
+
+
+                <!-- CITY -->
+
+                <div class="form-group">
+
+                    <label for="city">
+                        City
+                    </label>
+
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        value="{{ city|default:'' }}"
+                        placeholder="Enter your city"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PINCODE -->
+
+                <div class="form-group">
+
+                    <label for="pincode">
+                        Pincode
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pincode"
+                        name="pincode"
+                        value="{{ pincode|default:'' }}"
+                        placeholder="Enter your pincode"
+                        maxlength="10"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- =========================================
+                     PAYMENT METHOD
+                ========================================== -->
+
+                <div class="form-group">
+
+                    <label for="payment_method">
+                        Payment Method
+                    </label>
+
+                    <select
+                        id="payment_method"
+                        name="payment_method"
+                        required
+                    >
+
+                        <option
+                            value="COD"
+                            {% if payment_method == "COD" or not payment_method %}
+                                selected
+                            {% endif %}
+                        >
+                            Cash on Delivery
+                        </option>
+
+                        <option
+                            value="ONLINE"
+                            {% if payment_method == "ONLINE" %}
+                                selected
+                            {% endif %}
+                        >
+                            Online Payment
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- =========================================
+                     PLACE ORDER
+                ========================================== -->
+
+                <button
+                    type="submit"
+                    class="place-order-btn"
+                >
+                    🛍️ Place Order
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- =========================================
+             ORDER SUMMARY
+        ========================================== -->
+
+        <div class="order-summary">
+
+            <h2>
+                Order Summary
+            </h2>
+
+
+            {% for item in cart_items %}
+
+                <div class="summary-item">
+
+                    <div>
+
+                        <strong>
+                            {{ item.product.name }}
+                        </strong>
+
+                        <p>
+                            Quantity:
+                            {{ item.quantity }}
+                        </p>
+
+                    </div>
+
+                    <strong>
+                        ₹{{ item.total_price }}
+                    </strong>
+
+                </div>
+
+            {% empty %}
+
+                <p>
+                    Your cart is empty.
+                </p>
+
+            {% endfor %}
+
+
+            <hr>
+
+
+            <!-- TOTAL -->
+
+            <div class="summary-total">
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    ₹{{ total }}
+                </strong>
+
+            </div>
+
+
+            <!-- PAYMENT INFORMATION -->
+
+            <div class="payment-summary">
+
+                <strong>
+                    Payment Method:
+                </strong>
+
+                {% if payment_method == "ONLINE" %}
+
+                    <span>
+                        Online Payment
+                    </span>
+
+                {% else %}
+
+                    <span>
+                        Cash on Delivery
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- BACK TO CART -->
+
+            <a
+                href="{% url 'cart' %}"
+                class="back-cart-btn"
+            >
+                ← Back to Cart
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "bakery/base.html" %}
+
+{% block title %}
+Create Account | Kavya's Bakery
+{% endblock %}
+
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-container">
+
+        <h2>
+            Create Your Account
+        </h2>
+
+        <p>
+            Join Kavya's Bakery and order
+            your favourite treats.
+        </p>
+
+
+        <form
+            method="POST"
+            class="auth-form"
+        >
+
+            {% csrf_token %}
+
+
+            {% if form.errors %}
+
+                <div class="form-errors">
+
+                    Please correct the errors below.
+
+                </div>
+
+            {% endif %}
+
+
+            {{ form.as_p }}
+
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+
+        <p class="auth-link">
+
+            Already have an account?
+
+            <a href="#">
+                Login
+            </a>
+
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}

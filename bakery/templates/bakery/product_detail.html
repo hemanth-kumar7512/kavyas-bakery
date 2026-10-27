@@ -1,0 +1,87 @@
+{% extends "bakery/base.html" %}
+
+{% block title %}
+{{ product.name }} | Kavya's Bakery
+{% endblock %}
+
+
+{% block content %}
+
+<section class="product-detail">
+
+    <div class="product-detail-container">
+
+
+        <!-- PRODUCT IMAGE -->
+
+        <div class="product-detail-image">
+
+            {% if product.image %}
+
+                <img
+                    src="{{ product.image.url }}"
+                    alt="{{ product.name }}"
+                >
+
+            {% else %}
+
+                <div class="detail-no-image">
+                    No Image Available
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- PRODUCT INFORMATION -->
+
+        <div class="product-detail-info">
+
+            <p class="product-category">
+                {{ product.category.name }}
+            </p>
+
+            <h1>
+                {{ product.name }}
+            </h1>
+
+            <p class="detail-price">
+                ₹{{ product.price }}
+            </p>
+
+            <p class="detail-description">
+                {{ product.description }}
+            </p>
+
+
+            {% if product.is_available %}
+
+                <p class="availability">
+                    ✓ Available
+                </p>
+
+                <button class="add-cart-btn">
+                    🛒 Add to Cart
+                </button>
+
+            {% else %}
+
+                <p class="out-of-stock">
+                    Currently Unavailable
+                </p>
+
+            {% endif %}
+
+
+            <a href="/" class="back-menu-btn">
+                ← Back to Menu
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

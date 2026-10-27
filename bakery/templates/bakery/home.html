@@ -1,0 +1,861 @@
+{% extends "bakery/base.html" %}
+
+{% block title %}
+Home | Kavya's Bakery
+{% endblock %}
+
+{% block content %}
+
+
+<!-- =====================================================
+     HERO SECTION
+===================================================== -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <p class="small-title">
+            WELCOME TO KAVYA'S BAKERY
+        </p>
+
+        <h1>
+            Freshly Baked.
+            <br>
+            Made With Love.
+        </h1>
+
+        <p>
+            Delicious cakes, pastries, breads and
+            savouries made fresh for every special moment.
+        </p>
+
+        <a href="#menu" class="btn">
+            Explore Our Menu
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT SECTION
+===================================================== -->
+
+<section class="about">
+
+    <h2>Welcome to Kavya's Bakery</h2>
+
+    <p>
+        We create delicious bakery products using
+        carefully selected ingredients and creative
+        flavours. From birthday cakes to everyday
+        treats, we make every bite special.
+    </p>
+
+</section>
+
+
+<!-- =====================================================
+     CATEGORY SECTION
+===================================================== -->
+
+<section class="categories">
+
+    <h2>Shop By Category</h2>
+
+    <p class="section-description">
+        Choose your favourite bakery category
+    </p>
+
+    <div class="category-buttons">
+
+        <a href="#cakes-menu">
+            🎂 Cakes
+        </a>
+
+        <a href="#tarts-menu">
+            🥧 Tarts
+        </a>
+
+        <a href="#croissants-menu">
+            🥐 Croissants
+        </a>
+
+        <a href="#savouries-menu">
+            🥪 Savouries
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SEARCH + FILTERS
+===================================================== -->
+
+<section class="search-section">
+
+    <h2>
+        Find Your Favourite Treat
+    </h2>
+
+    <p class="section-description">
+        Search and filter our delicious bakery products.
+    </p>
+
+
+    <form
+        method="GET"
+        action="/"
+        class="filter-form"
+        id="filter-form"
+    >
+
+
+        <!-- ================= SEARCH ================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Search
+            </label>
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search_query }}"
+                placeholder="Search products..."
+            >
+
+        </div>
+
+
+        <!-- ================= CATEGORY ================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Category
+            </label>
+
+            <select name="category">
+
+                <option value="">
+                    All Categories
+                </option>
+
+                <option
+                    value="Cakes"
+                    {% if selected_category == "Cakes" %}
+                        selected
+                    {% endif %}
+                >
+                    🎂 Cakes
+                </option>
+
+                <option
+                    value="Tarts"
+                    {% if selected_category == "Tarts" %}
+                        selected
+                    {% endif %}
+                >
+                    🥧 Tarts
+                </option>
+
+                <option
+                    value="Croissants"
+                    {% if selected_category == "Croissants" %}
+                        selected
+                    {% endif %}
+                >
+                    🥐 Croissants
+                </option>
+
+                <option
+                    value="Savouries"
+                    {% if selected_category == "Savouries" %}
+                        selected
+                    {% endif %}
+                >
+                    🥪 Savouries
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ================= MIN PRICE ================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Min Price
+            </label>
+
+            <input
+                type="number"
+                name="min_price"
+                value="{{ min_price }}"
+                placeholder="₹100"
+                min="0"
+            >
+
+        </div>
+
+
+        <!-- ================= MAX PRICE ================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Max Price
+            </label>
+
+            <input
+                type="number"
+                name="max_price"
+                value="{{ max_price }}"
+                placeholder="₹2000"
+                min="0"
+            >
+
+        </div>
+
+
+        <!-- ================= AVAILABILITY ================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Availability
+            </label>
+
+            <select name="availability">
+
+                <option value="">
+                    All Products
+                </option>
+
+                <option
+                    value="available"
+                    {% if selected_availability == "available" %}
+                        selected
+                    {% endif %}
+                >
+                    🟢 Available
+                </option>
+
+                <option
+                    value="unavailable"
+                    {% if selected_availability == "unavailable" %}
+                        selected
+                    {% endif %}
+                >
+                    🔴 Unavailable
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ================= FEATURED ================= -->
+
+        <div class="featured-filter">
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    name="featured"
+                    value="yes"
+                    {% if featured_only == "yes" %}
+                        checked
+                    {% endif %}
+                >
+
+                ⭐ Featured Products Only
+
+            </label>
+
+        </div>
+
+
+        <!-- ================= BUTTONS ================= -->
+
+        <div class="filter-buttons">
+
+            <button
+                type="submit"
+                class="filter-btn"
+            >
+                🔍 Apply Filters
+            </button>
+
+
+            <a
+                href="/"
+                class="clear-filter"
+            >
+                Clear Filters
+            </a>
+
+        </div>
+
+    </form>
+
+
+    <!-- ================= FILTER RESULT ================= -->
+
+    {% if search_query or selected_category or min_price or max_price or selected_availability or featured_only %}
+
+        <div class="filter-result">
+
+            <h3>
+                🔍 Filter Results
+            </h3>
+
+            <p>
+                Showing
+                <strong>{{ all_products|length }}</strong>
+                product{{ all_products|length|pluralize }}
+                matching your filters.
+            </p>
+
+        </div>
+
+
+        <!-- ================= NO PRODUCTS ================= -->
+
+        {% if not all_products %}
+
+            <div class="empty-filter-result">
+
+                <h3>
+                    😔 No Products Found
+                </h3>
+
+                <p>
+                    Sorry, we couldn't find any products
+                    matching your selected filters.
+                </p>
+
+                <a
+                    href="/"
+                    class="clear-filter"
+                >
+                    Clear Filters
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+</section>
+
+
+<!-- =====================================================
+     FEATURED PRODUCTS
+===================================================== -->
+
+<section id="menu" class="menu-section">
+
+    <h2>
+        Featured Products
+    </h2>
+
+    <p class="section-description">
+        Discover some of our freshly prepared favourites.
+    </p>
+
+
+    <div class="product-grid">
+
+        {% for product in featured_products %}
+
+            <div class="product-card">
+
+
+                <!-- PRODUCT IMAGE -->
+
+                {% if product.image %}
+
+                    <img
+                        src="{{ product.image.url }}"
+                        alt="{{ product.name }}"
+                    >
+
+                {% else %}
+
+                    <div class="no-image">
+                        No Image Available
+                    </div>
+
+                {% endif %}
+
+
+                <!-- PRODUCT INFORMATION -->
+
+                <div class="product-info">
+
+                    <h3>
+                        {{ product.name }}
+                    </h3>
+
+                    <p>
+                        {{ product.description }}
+                    </p>
+
+
+                    <div class="product-bottom">
+
+                        <strong>
+                            ₹{{ product.price }}
+                        </strong>
+
+                        <a href="{% url 'add_to_cart' product.id %}" class="view-btn">
+                             🛒 Add to Cart
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        {% empty %}
+
+            <p class="empty-message">
+                Featured products will be available soon.
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     COMPLETE MENU
+===================================================== -->
+
+<section id="complete-menu" class="complete-menu">
+
+    <h2>
+        Complete Menu
+    </h2>
+
+    <p class="section-description">
+        Explore all our freshly prepared bakery products.
+    </p>
+
+
+    <!-- =================================================
+         CAKES
+    ================================================== -->
+
+    <div id="cakes-menu" class="menu-category">
+
+        <h3>
+            🎂 Cakes
+        </h3>
+
+
+        <div class="product-grid">
+
+            {% for product in all_products %}
+
+                {% if product.category.name == "Cakes" %}
+
+                    <div class="product-card">
+
+                        {% if product.image %}
+
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        {% else %}
+
+                            <div class="no-image">
+                                No Image Available
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="product-info">
+
+                            <h3>
+                                {{ product.name }}
+                            </h3>
+
+                            <p>
+                                {{ product.description }}
+                            </p>
+
+
+                            <div class="product-bottom">
+
+                                <strong>
+                                    ₹{{ product.price }}
+                                </strong>
+
+
+                                <a
+                                    href="{% url 'product_detail' product.id %}"
+                                    class="view-btn"
+                                >
+                                    View Product
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         TARTS
+    ================================================== -->
+
+    <div id="tarts-menu" class="menu-category">
+
+        <h3>
+            🥧 Tarts
+        </h3>
+
+
+        <div class="product-grid">
+
+            {% for product in all_products %}
+
+                {% if product.category.name == "Tarts" %}
+
+                    <div class="product-card">
+
+                        {% if product.image %}
+
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        {% else %}
+
+                            <div class="no-image">
+                                No Image Available
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="product-info">
+
+                            <h3>
+                                {{ product.name }}
+                            </h3>
+
+                            <p>
+                                {{ product.description }}
+                            </p>
+
+
+                            <div class="product-bottom">
+
+                                <strong>
+                                    ₹{{ product.price }}
+                                </strong>
+
+
+                                <a
+                                    href="{% url 'product_detail' product.id %}"
+                                    class="view-btn"
+                                >
+                                    View Product
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CROISSANTS
+    ================================================== -->
+
+    <div id="croissants-menu" class="menu-category">
+
+        <h3>
+            🥐 Croissants
+        </h3>
+
+
+        <div class="product-grid">
+
+            {% for product in all_products %}
+
+                {% if product.category.name == "Croissants" %}
+
+                    <div class="product-card">
+
+                        {% if product.image %}
+
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        {% else %}
+
+                            <div class="no-image">
+                                No Image Available
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="product-info">
+
+                            <h3>
+                                {{ product.name }}
+                            </h3>
+
+                            <p>
+                                {{ product.description }}
+                            </p>
+
+
+                            <div class="product-bottom">
+
+                                <strong>
+                                    ₹{{ product.price }}
+                                </strong>
+
+
+                                <a
+                                    href="{% url 'product_detail' product.id %}"
+                                    class="view-btn"
+                                >
+                                    View Product
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SAVOURIES
+    ================================================== -->
+
+    <div id="savouries-menu" class="menu-category">
+
+        <h3>
+            🥪 Savouries
+        </h3>
+
+
+        <div class="product-grid">
+
+            {% for product in all_products %}
+
+                {% if product.category.name == "Savouries" %}
+
+                    <div class="product-card">
+
+                        {% if product.image %}
+
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        {% else %}
+
+                            <div class="no-image">
+                                No Image Available
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="product-info">
+
+                            <h3>
+                                {{ product.name }}
+                            </h3>
+
+                            <p>
+                                {{ product.description }}
+                            </p>
+
+
+                            <div class="product-bottom">
+
+                                <strong>
+                                    ₹{{ product.price }}
+                                </strong>
+
+
+                                <a
+                                    href="{% url 'product_detail' product.id %}"
+                                    class="view-btn"
+                                >
+                                    View Product
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     WHY CHOOSE US
+===================================================== -->
+
+<section class="why-us">
+
+    <h2>
+        Why Choose Kavya's Bakery?
+    </h2>
+
+
+    <div class="why-container">
+
+
+        <!-- CARD 1 -->
+
+        <div class="why-card">
+
+            <div class="why-icon">
+                🧁
+            </div>
+
+            <h3>
+                Fresh Products
+            </h3>
+
+            <p>
+                Our bakery products are prepared
+                fresh with quality ingredients.
+            </p>
+
+        </div>
+
+
+        <!-- CARD 2 -->
+
+        <div class="why-card">
+
+            <div class="why-icon">
+                ❤️
+            </div>
+
+            <h3>
+                Made With Love
+            </h3>
+
+            <p>
+                Every product is prepared with
+                care and attention to detail.
+            </p>
+
+        </div>
+
+
+        <!-- CARD 3 -->
+
+        <div class="why-card">
+
+            <div class="why-icon">
+                🚚
+            </div>
+
+            <h3>
+                Fast Delivery
+            </h3>
+
+            <p>
+                Get your favourite bakery products
+                delivered conveniently.
+            </p>
+
+        </div>
+
+
+        <!-- CARD 4 -->
+
+        <div class="why-card">
+
+            <div class="why-icon">
+                ⭐
+            </div>
+
+            <h3>
+                Quality
+            </h3>
+
+            <p>
+                We focus on great taste and
+                consistent quality.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
